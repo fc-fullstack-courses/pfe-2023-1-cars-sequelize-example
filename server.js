@@ -1,13 +1,12 @@
-const express = require('express');
+const http = require('http');
+const app = require('./app');
 const config = require('./configs/server.json');
 
-const app = express();
-
-app.use(express.json());
+const server = http.createServer(app);
 
 const PORT = process.env.PORT || config.PORT;
 const HOST = process.env.HOST || config.HOST;
 
-app.listen(PORT, HOST, () => {
+server.listen(PORT, HOST, () => {
   console.log(`started on ${HOST}:${PORT}`);
 });
