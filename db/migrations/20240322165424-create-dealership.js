@@ -14,13 +14,15 @@ module.exports = {
         allowNull: false
       },
       imagePath: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING, 
+        field: 'image_path'
       },
       address: {
         type: Sequelize.JSON
       },
       phoneNumber: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING, 
+        field: 'phone_number'
       },
       createdAt: {
         allowNull: false,

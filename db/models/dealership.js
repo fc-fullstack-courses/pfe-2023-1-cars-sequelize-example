@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({Car}) {
+    static associate({ Car }) {
       // define association here
       Dealership.belongsToMany(Car, {
         through: 'cars_to_dealerships',
@@ -24,30 +24,32 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: true,
-          notEmpty: true
-        }
+          notEmpty: true,
+        },
       },
       imagePath: {
         type: DataTypes.STRING,
+        field: 'image_path',
         validate: {
-          notEmpty: true
-        }
+          notEmpty: true,
+        },
       },
       address: {
         type: DataTypes.JSON,
       },
       phoneNumber: {
         type: DataTypes.STRING,
+        field: 'phone_number',
         validate: {
-          notEmpty: true
-        }
+          notEmpty: true,
+        },
       },
     },
     {
       sequelize,
       modelName: 'Dealership',
       tableName: 'dealerships',
-      underscored: true
+      underscored: true,
     }
   );
   return Dealership;
