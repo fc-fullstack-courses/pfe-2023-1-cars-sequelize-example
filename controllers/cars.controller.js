@@ -3,9 +3,14 @@ const { Car } = require('../db/models');
 
 module.exports.createCar = async (req, res, next) => {
   try {
-    const { body } = req;
+    const { body, file: { filename } = {} } = req;
 
-    const car = await Car.create(body);
+    const carData = {
+      ...body,
+      imagePath: filename,
+    };
+
+    const car = await Car.create(carData);
 
     res.status(201).send({ data: car });
   } catch (error) {
@@ -31,7 +36,7 @@ module.exports.getCar = async (req, res, next) => {
 
     const car = await Car.findByPk(carId);
 
-    if(!car) {
+    if (!car) {
       throw createHttpError(404, 'Car not found');
     }
 
@@ -46,16 +51,22 @@ module.exports.updateCar = async (req, res, next) => {
     const {
       body,
       params: { carId },
+      file: { filename } = {},
     } = req;
 
-    const [updatedRows, [car]] = await Car.update(body, {
+    const carData = {
+      ...body,
+      imagePath: filename,
+    };
+
+    const [updatedRows, [car]] = await Car.update(carData, {
       where: {
         id: carId,
       },
       returning: true,
     });
 
-    if(updatedRows === 0) {
+    if (updatedRows === 0) {
       throw createHttpError(404, 'Car not found');
     }
 
@@ -73,7 +84,7 @@ module.exports.deleteCar = async (req, res, next) => {
 
     const car = await Car.findByPk(carId);
 
-    if(!car) {
+    if (!car) {
       throw createHttpError(404, 'Car not found');
     }
 
