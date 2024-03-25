@@ -1,5 +1,5 @@
 const createHttpError = require('http-errors');
-const { Car } = require('../db/models');
+const { Car, Dealership } = require('../db/models');
 
 module.exports.createCar = async (req, res, next) => {
   try {
@@ -40,7 +40,12 @@ module.exports.getCar = async (req, res, next) => {
       throw createHttpError(404, 'Car not found');
     }
 
-    res.status(200).send({ data: car });
+    const dealerships = await car.getDealerships({
+      attributes: ['name', 'imagePath'],
+      joinTableAttributes: []
+    });
+
+    res.status(200).send({ data: { car, dealerships } });
   } catch (error) {
     next(error);
   }
@@ -89,6 +94,32 @@ module.exports.deleteCar = async (req, res, next) => {
     }
 
     await car.destroy();
+
+    res.status(200).send({ data: car });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.addCarToDealership = async (req, res, next) => {
+  try {
+    const {
+      params: { carId, dealershipId },
+    } = req;
+
+    const car = await Car.findByPk(carId);
+
+    if (!car) {
+      throw createHttpError(404, 'Car not found');
+    }
+
+    const dealership = await Dealership.findByPk(dealershipId);
+
+    if (!dealership) {
+      throw createHttpError(404, 'Dealership not found');
+    }
+
+    await car.addDealership(dealership);
 
     res.status(200).send({ data: car });
   } catch (error) {

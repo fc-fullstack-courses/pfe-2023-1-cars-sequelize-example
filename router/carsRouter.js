@@ -9,4 +9,6 @@ carsRouter.get('/:carId', CarsController.getCar);
 carsRouter.put('/:carId', imageUpload.single('pic'), CarsController.updateCar);
 carsRouter.delete('/:carId', CarsController.deleteCar);
 
+carsRouter.post('/:carId/dealerships/:dealershipId', CarsController.addCarToDealership);
+
 module.exports = carsRouter;
